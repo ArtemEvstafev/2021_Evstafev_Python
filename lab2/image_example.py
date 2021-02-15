@@ -14,7 +14,6 @@ def shtrih():#пример штриховки
         d.line(screen, color, (x, y1), (x, y2))
         x += h
 screen = pygame.display.set_mode((400, 400))#инициализация экрана
-
 d.rect(screen, (255, 0, 255), (100, 100, 200, 200))
 d.rect(screen, (0, 0, 255), (100, 100, 200, 200), 5)
 d.polygon(screen, (255, 255, 0), [(100,100), (200,50),
@@ -23,6 +22,9 @@ d.polygon(screen, (0, 0, 255), [(100,100), (200,50),
                                (300,100), (100,100)], 5)
 d.circle(screen, (0, 255, 0), (200, 175), 50)
 d.circle(screen, (255, 255, 255), (200, 175), 50, 5)
+#d.rect(screen, (red, green, blue), (x_topleft, y_topleft,ширина ,высота ), width)
+#d.polygon(screen, (red, green, blue), [(x1, y1), (x2, y2),(x3, y3), (x4, y4)], width)
+#d.circle(screen, (red, green, blue), (x, y), R, width)
 
 pygame.display.update()#бновление экрана для отображения картинок
 clock = pygame.time.Clock()#добавление FPS в экран
