@@ -23,7 +23,7 @@ def medved(size, x, y):
     d.ellipse(screen, (255, 255, 255), (x + N * (1 / 4 + 1 / 16), y + N * 0.4, 7 * N / 32, 3 * N / 32), 0)  # arm
     d.ellipse(screen, (0, 0, 0), (x + N * (1 / 4 + 1 / 16), y + N * 0.4, 7 * N / 32, 3 * N / 32), 1)
 
-    d.ellipse(screen, (51, 51, 255), (x + N / 2, y + N * (1 - 4 / 16),  N / 2, 4 * N / 16), 0)  # proryb
+    d.ellipse(screen, (169, 169, 169), (x + N / 2, y + N * (1 - 4 / 16),  N / 2, 4 * N / 16), 0)  # proryb
     d.ellipse(screen, (0, 0, 0), (x + N / 2, y + N * (1 - 4 / 16),  N / 2, 4 * N / 16), 1)
 
     d.ellipse(screen, (0, 0, 102), (x + N*(1 / 2+1/4), y + N * (1 - 4 / 16), N / 4, 3 * N / 16), 0)  # water
