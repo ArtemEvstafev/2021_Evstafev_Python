@@ -5,6 +5,30 @@ FPS = 30
 screen = pygame.display.set_mode((1500, 780))#инициализация экрана
 def medved(size, x, y):
     d.rect(screen, (0, 0, 0), (x, y, size ,size ), 1)
+    N = size
+    d.ellipse(screen, (255, 255, 255), (x,y+N/8 ,N*3/8 ,N*0.75 ), 0)#body
+    d.ellipse(screen, (0, 0, 0), (x,y+N/8 ,N*3/8 ,N*0.75 ), 1)
+
+    d.ellipse(screen, (255, 255, 255), (x+ N/8, y , N * 3 / 8, 3*N /16), 0)#head
+    d.ellipse(screen, (0, 0, 0), (x+ N/8, y, N * 3 / 8, 3*N /16), 1)
+
+    d.ellipse(screen, (255, 255, 255), (x + N / 8, y+N*(1-5/16), 5 * N / 16, 5 * N / 16), 0)  # leg
+    d.ellipse(screen, (0, 0, 0), (x + N / 8, y+N*(1-5/16), 5 * N / 16, 5 * N / 16), 1)
+
+    d.ellipse(screen, (255, 255, 255), (x + N*( 1/4+1/16), y + N * (1 - 3 / 32), 7 * N / 32, 3 * N / 32), 0)  # feet
+    d.ellipse(screen, (0, 0, 0), (x + N *(1/ 4+1/16), y + N * (1 - 3 / 32), 7 * N / 32, 3 * N / 32), 1)
+
+    d.line(screen,(0, 0, 0), (x+N*3/8, y+N/2), (x+N*3/4, y), 5)#fishing rod
+
+    d.ellipse(screen, (255, 255, 255), (x + N * (1 / 4 + 1 / 16), y + N * 0.4, 7 * N / 32, 3 * N / 32), 0)  # arm
+    d.ellipse(screen, (0, 0, 0), (x + N * (1 / 4 + 1 / 16), y + N * 0.4, 7 * N / 32, 3 * N / 32), 1)
+
+    d.ellipse(screen, (51, 51, 255), (x + N / 2, y + N * (1 - 4 / 16),  N / 2, 4 * N / 16), 0)  # proryb
+    d.ellipse(screen, (0, 0, 0), (x + N / 2, y + N * (1 - 4 / 16),  N / 2, 4 * N / 16), 1)
+
+    d.ellipse(screen, (0, 0, 102), (x + N*(1 / 2+1/4), y + N * (1 - 4 / 16), N / 4, 3 * N / 16), 0)  # water
+    d.ellipse(screen, (0, 0, 0), (x + N*(1 / 2+1/4), y + N * (1 - 4 / 16), N / 4, 3 * N / 16), 1)
+    #d.line(screen, (0, 0, 0), (x+N*3/4, y), (x + N * 3 / 4, y), 5)#fishing net
 
 #d.rect(screen, (red, green, blue), (x_topleft, y_topleft,ширина ,высота ), width)
 #d.polygon(screen, (red, green, blue), [(x1, y1), (x2, y2),(x3, y3), (x4, y4)], width)
