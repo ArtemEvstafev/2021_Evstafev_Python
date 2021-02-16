@@ -26,17 +26,18 @@ def medved(size, x, y):
     d.ellipse(screen, (169, 169, 169), (x + N / 2, y + N * (1 - 4 / 16),  N / 2, 4 * N / 16), 0)  # proryb
     d.ellipse(screen, (0, 0, 0), (x + N / 2, y + N * (1 - 4 / 16),  N / 2, 4 * N / 16), 1)
 
-    d.ellipse(screen, (0, 0, 102), (x + N*(1 / 2+1/4), y + N * (1 - 4 / 16), N / 4, 3 * N / 16), 0)  # water
-    d.ellipse(screen, (0, 0, 0), (x + N*(1 / 2+1/4), y + N * (1 - 4 / 16), N / 4, 3 * N / 16), 1)
-    #d.line(screen, (0, 0, 0), (x+N*3/4, y), (x + N * 3 / 4, y), 5)#fishing net
+    d.ellipse(screen, (0, 0, 102), (x + N*(0.5+(1 / 2-7/16)/2), y + N * (1 - 3 / 16), 7* N / 16, 3 * N / 16), 0)  # water
+    d.ellipse(screen, (0, 0, 0), (x + N*(0.5+(1 / 2-7/16)/2), y + N * (1 - 3 / 16), 7* N / 16, 3 * N / 16), 1)
+
+    d.line(screen, (0, 0, 0), (x+N*3/4, y), (x + N * 3 / 4, y+N*(1-1/8), 2)#spinning
 
 #d.rect(screen, (red, green, blue), (x_topleft, y_topleft,ширина ,высота ), width)
 #d.polygon(screen, (red, green, blue), [(x1, y1), (x2, y2),(x3, y3), (x4, y4)], width)
 #d.circle(screen, (red, green, blue), (x, y), R, width)
 #d.ellipse(screen, (red, green, blue), (x_topleft, y_topleft,ширина ,высота ), width)
 
-d.rect(screen, (0, 190, 240), (0, 0,1500 ,390 ), 0)#небо
-d.rect(screen, (255, 255, 255), (0, 390,1500 ,390 ), 0)#лед
+d.rect(screen, (0, 190, 240), (0, 0,1500 ,390 ), 0) #небо
+d.rect(screen, (255, 255, 255), (0, 390,1500 ,390 ), 0) #лед
 medved(600, 300,160)
 
 
