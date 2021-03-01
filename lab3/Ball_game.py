@@ -2,6 +2,7 @@ import pygame
 import pygame.draw as draw
 from random import randint
 from random import choice
+
 pygame.init()
 
 Score = 0
@@ -37,7 +38,7 @@ def new_ball(x_delta, y_delta):
         r = randint(10, 100)
         color = COLORS[randint(0, 6)]
         draw.circle(screen, color, (x, y), r)
-        number = [-SPEED , SPEED]
+        number = [-SPEED, SPEED]
         return [choice(number), choice(number)]
     else:  # тут происходит анимация
         x += x_delta
@@ -63,11 +64,13 @@ def move_direction(x, y, r):
 pygame.display.update()
 clock = pygame.time.Clock()
 
-font = pygame.font.Font(None, 50)                             #
-text = font.render("Your Score is " + str(Score), True, WHITE)#
-text_miss = font.render("MISS!", True, WHITE)                 # Создает текст сверху
-screen.blit(text, [500, 0])                                   #
+font = pygame.font.Font(None, 50)  #
+text = font.render("Your Score is " + str(Score), True, WHITE)  #
+text_miss = font.render("MISS!", True, WHITE)  # Создает текст сверху
+screen.blit(text, [500, 0])  #
+
 new_ball(0, 0)  # первый шарик
+new_ball(0, 0) #второй шарик
 pygame.display.update()
 
 while not finished:
@@ -81,10 +84,10 @@ while not finished:
             if (((event.x - x) ** 2 + (event.y - y) ** 2) ** 0.5 < r):
                 Score += 1
                 print('Your Score is: ', Score)
-                x_delta, y_delta = new_ball(0, 0)#для случайного направления после появления
+                x_delta, y_delta = new_ball(0, 0)  # для случайного направления после появления
                 pygame.display.update()
             else:
-                #print('Miss')
+                # print('Miss')
                 screen.blit(text_miss, [800, 0])
                 Score = 0
     move_direction(x, y, r)
