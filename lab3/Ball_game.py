@@ -24,7 +24,8 @@ finished = False
 
 def new_ball(x_delta, y_delta):
     '''
-
+    Функция создает новйы шарик, если передать 0.0, возвращая картэж из (+-1,+-1)
+    При других значения дельта рисует новый шарик в дельта окрестности
     :param x_delta: смщенеие по x
     :param y_delta: смещение по y
     :return: при x_delta = y_delta = 0 случайным образом меняет направления смещения
@@ -62,10 +63,10 @@ def move_direction(x, y, r):
 pygame.display.update()
 clock = pygame.time.Clock()
 
-font = pygame.font.Font(None, 50)
-text = font.render("Your Score is " + str(Score), True, WHITE)
-text_miss = font.render("MISS!", True, WHITE)
-screen.blit(text, [650, 0])
+font = pygame.font.Font(None, 50)                             #
+text = font.render("Your Score is " + str(Score), True, WHITE)#
+text_miss = font.render("MISS!", True, WHITE)                 # Создает текст сверху
+screen.blit(text, [500, 0])                                   #
 new_ball(0, 0)  # первый шарик
 pygame.display.update()
 
@@ -80,16 +81,16 @@ while not finished:
             if (((event.x - x) ** 2 + (event.y - y) ** 2) ** 0.5 < r):
                 Score += 1
                 print('Your Score is: ', Score)
-                x_delta, y_delta = new_ball(0, 0)
+                x_delta, y_delta = new_ball(0, 0)#для случайного направления после появления
                 pygame.display.update()
             else:
                 #print('Miss')
-                screen.blit(text_miss, [750, 0])
+                screen.blit(text_miss, [800, 0])
                 Score = 0
     move_direction(x, y, r)
     new_ball(x_delta, y_delta)
-    text = font.render("Score " + str(Score), True, WHITE)
-    screen.blit(text, [625, 0])
+    text = font.render("Your Score is: " + str(Score), True, WHITE)
+    screen.blit(text, [500, 0])
     pygame.display.update()
     screen.fill(BLACK)  # для исчезания прошлого рисунка
 
