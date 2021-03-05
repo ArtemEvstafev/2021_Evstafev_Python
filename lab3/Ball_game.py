@@ -11,6 +11,8 @@ screen = pygame.display.set_mode((1300, 700))
 SPEED = 5
 x_delta = SPEED
 y_delta = SPEED
+x_delta_sqr = SPEED + 5
+y_delta_sqr = SPEED + 5
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
@@ -44,11 +46,28 @@ def new_ball(x_delta, y_delta):
         x += x_delta
         y += y_delta
         draw.circle(screen, color, (x, y), r)
+def new_square(x_delta_sqr, y_delta_sqr):
+    if x_delta_sqr == 0 and y_delta_sqr == 0:
+        global x_sqr, y_sqr, r_sqr, color_sqr
+        x_sqr = randint(100, 1200)
+        y_sqr = randint(100, 600)
+        r_sqr = 20
+        color_sqr = COLORS[randint(0, 6)]
+        draw.rect(screen, color_sqr, (x_sqr - int(20/2**0.5), y_sqr - int(20/2**0.5), int(40/2**0.5), int(40/2**0.5)), 0)
+        #draw.circle(screen, color_sqr, (x_sqr, y_sqr), r_sqr, 1)
+        number = [-SPEED, SPEED]
+        return [choice(number), choice(number)]
+    else:  # тут происходит анимация
+        x_sqr += x_delta_sqr
+        y_sqr += y_delta_sqr
+        draw.rect(screen, color_sqr, (x_sqr - int(20 / 2 ** 0.5), y_sqr - int(20 / 2 ** 0.5), int(40 / 2 ** 0.5), int(40 / 2 ** 0.5)), 0)
+        #draw.circle(screen, color_sqr, (x_sqr, y_sqr), r_sqr, 1)
 
 
-def move_direction(x, y, r):
+
+def move_direction(x, y, r, x_sqr, y_sqr, r_sqr):
     '''
-
+    функция изменяет направление шара при ударе о стенку
     :param x: x координата шара
     :param y: y координата шара
     :param r: радиус шара
@@ -59,6 +78,11 @@ def move_direction(x, y, r):
         y_delta *= -1
     if (x + r > 1300 or x - r < 0):
         x_delta *= -1
+    global x_delta_sqr, y_delta_sqr
+    if (y_sqr + r_sqr > 700 or y_sqr - r_sqr < 0):
+        y_delta_sqr *= -1
+    if (x_sqr + r_sqr > 1300 or x_sqr - r_sqr < 0):
+        x_delta_sqr *= -1
 
 
 pygame.display.update()
@@ -70,7 +94,7 @@ text_miss = font.render("MISS!", True, WHITE)  # Создает текст св�
 screen.blit(text, [500, 0])  #
 
 new_ball(0, 0)  # первый шарик
-new_ball(0, 0) #второй шарик
+new_square(0, 0)  # второй шарик
 pygame.display.update()
 
 while not finished:
@@ -90,9 +114,10 @@ while not finished:
                 # print('Miss')
                 screen.blit(text_miss, [800, 0])
                 Score = 0
-    move_direction(x, y, r)
+    move_direction(x, y, r, x_sqr, y_sqr, r_sqr)
     new_ball(x_delta, y_delta)
-    text = font.render("Your Score is: " + str(Score), True, WHITE)
+    new_square(x_delta_sqr, y_delta_sqr)
+    text = font.render("Your Score is: " + str(Score), True, WHITE)  # обновление счета после попадания
     screen.blit(text, [500, 0])
     pygame.display.update()
     screen.fill(BLACK)  # для исчезания прошлого рисунка
