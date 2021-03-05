@@ -6,6 +6,8 @@ from random import choice
 pygame.init()
 
 Score = 0
+SCORES = [0, 0, 0, 0, 0]
+NAMES = ['-', '-', '-', '-', '-']
 FPS = 50
 screen = pygame.display.set_mode((1300, 700))
 SPEED = 5
@@ -38,7 +40,7 @@ def new_ball(x_delta, y_delta):
         global x, y, r, color
         x = randint(100, 1200)
         y = randint(100, 600)
-        r = 100#randint(10, 100)
+        r = randint(10, 100)
         color = COLORS[randint(0, 6)]
         draw.circle(screen, color, (x, y), r)
         number = [-SPEED, SPEED]
@@ -78,7 +80,7 @@ def new_square(x_delta_sqr, y_delta_sqr):
 
 def move_direction(x, y, r, x_sqr, y_sqr, r_sqr):
     '''
-    функция изменяет направление шара при ударе о стенку
+    функция изменяет направление шара при ударе о стенку или о друг друга
     :param x: x координата шара
     :param y: y координата шара
     :param r: радиус шара
@@ -94,12 +96,18 @@ def move_direction(x, y, r, x_sqr, y_sqr, r_sqr):
         y_delta_sqr *= -1
     if (x_sqr + r_sqr > 1300 or x_sqr - r_sqr < 0):
         x_delta_sqr *= -1
-    if (((x - x_sqr)**2 + (y - y_sqr)**2)**0.5  <= r + r_sqr ):
-        y_delta_sqr*=-1
-        x_delta_sqr*=-1
-        x_delta*=-1
-        y_delta*=-1
+    if (((x - x_sqr) ** 2 + (y - y_sqr) ** 2) ** 0.5 <= r + r_sqr):
+        y_delta_sqr *= -1
+        x_delta_sqr *= -1
+        x_delta *= -1
+        y_delta *= -1
 
+
+def score_saving():
+    file = open('PLAYERS.txt', 'w')
+    for i in range(0, 5):
+        print(i+1 , '. ', NAMES[i], ': ', SCORES[i], '\n', sep='', file=file)
+    file.close()
 
 
 pygame.display.update()
@@ -118,6 +126,7 @@ while not finished:
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            score_saving()
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # print('Click')
@@ -135,7 +144,17 @@ while not finished:
             else:
                 # print('Miss')
                 screen.blit(text_miss, [800, 0])
+                for i in range(0, 5):
+                    if Score > SCORES[i]:
+                        SCORES.insert(i, Score)
+                        SCORES.pop()
+                        name = input()
+                        NAMES.insert(i, name)
+                        NAMES.pop()
+                        break
                 Score = 0
+                print(SCORES)
+                print(NAMES)
     move_direction(x, y, r, x_sqr, y_sqr, r_sqr)
     new_ball(x_delta, y_delta)
     new_square(x_delta_sqr, y_delta_sqr)
