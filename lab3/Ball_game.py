@@ -104,9 +104,13 @@ def move_direction(x, y, r, x_sqr, y_sqr, r_sqr):
 
 
 def score_saving():
+    '''
+    сохраняет в файл таблицу из дучших игроков
+    :return:
+    '''
     file = open('PLAYERS.txt', 'w')
     for i in range(0, 5):
-        print(i+1 , '. ', NAMES[i], ': ', SCORES[i], '\n', sep='', file=file)
+        print(i + 1, '. ', NAMES[i], ': ', SCORES[i], '\n', sep='', file=file)
     file.close()
 
 
