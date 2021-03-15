@@ -8,7 +8,7 @@ pygame.init()
 Score = 0
 SCORES = [0, 0, 0, 0, 0]
 NAMES = ['-', '-', '-', '-', '-']
-FPS = 50
+FPS = 60
 screen = pygame.display.set_mode((1300, 700))
 SPEED = 5
 x_delta = SPEED
