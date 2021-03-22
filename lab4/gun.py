@@ -27,7 +27,7 @@ class ball():
         self.r = 10
         self.vx = 0
         self.vy = 0
-        self.color = choice(['blue', 'green', 'red', 'brown'])
+        self.color = choice(['blue', 'green', 'red', 'brown', 'black'])
         self.id = canv.create_oval(
             self.x - self.r,
             self.y - self.r,
@@ -133,11 +133,12 @@ class gun():
 
 class target():
     def __init__(self):
-        self.points = 0
+        #self.points = 0
+        global points
         self.live = 1
         # FIXME: don't work!!! How to call this functions when object is created?
         self.id = canv.create_oval(0, 0, 0, 0)
-        self.id_points = canv.create_text(30, 30, text=self.points, font='28')
+        self.id_points = canv.create_text(30, 30, text=points, font='28')#text=self.points
         self.new_target()
 
     def new_target(self):
@@ -145,18 +146,35 @@ class target():
         x = self.x = rnd(600, 780)
         y = self.y = rnd(300, 550)
         r = self.r = rnd(2, 50)
+        self.a = choice([1, -1, 2, -2, 3, -3])
         color = self.color = 'red'
         canv.coords(self.id, x - r, y - r, x + r, y + r)
         canv.itemconfig(self.id, fill=color)
 
-    def hit(self, points=1):
+    def hit(self):
         """Попадание шарика в цель."""
+        global points
         canv.coords(self.id, -10, -10, -10, -10)
-        self.points += points
-        canv.itemconfig(self.id_points, text=self.points)
+        points += 1
+        canv.itemconfig(self.id_points, text=points)
+    def move(self):
+        """Переместить мишегь по прошествии единицы времени.
+        """
+        if((self.y - self.r) >= 600):
+            self.y = 0 + self.r
+        if(self.y + self.r <= 0):
+            self.y = 600 + self.y
+        self.y += self.a
+
+    def set_coords(self):
+        x = self.x
+        y = self.y
+        r = self.r
+        canv.coords(self.id, x - r, y - r, x + r, y + r)
 
 
-targets = []
+points = 0
+targets = [] # массив мишеней
 for t in range(0, TARGETS_NUMBER):
     targets.append(target())
 
@@ -164,34 +182,36 @@ screen1 = canv.create_text(400, 300, text='', font='28')
 g1 = gun()
 bullet = 0
 balls = []
-lives = 1
+lives = 1 # важная вещь для проверки на стлокновение
 
 
-def new_game(event=''):
+def new_game(event=''):# основной цикл
     global gun, targets, lives, screen1, balls, bullet  # t1
 
-    for t in targets:
+    for t in targets: # создаем новые цел в игре
         t.new_target()
         t.live = 1
     lives = 1
     canv.itemconfig(screen1, text='')
     bullet = 0
     balls = []
-    canv.bind('<Button-1>', g1.fire2_start)
+    canv.bind('<Button-1>', g1.fire2_start)# эти три строчки отвечают за пушку
     canv.bind('<ButtonRelease-1>', g1.fire2_end)
     canv.bind('<Motion>', g1.targetting)
     z = 3
     while (lives == 1 or balls):
-        for b in balls:
+        for t in targets:
+            t.move()
+            t.set_coords()
+        for b in balls:#для движения мячей нужен данный цикл
             b.move()
             b.set_coords()
-            for t in targets:  # delete
-                if b.hittest(t) and t.live:  # t instead t1
-                    canv.delete(b.id)
-                    for b in balls:
+            for t in targets:
+                if b.hittest(t) and t.live:#данное условие выполняется при столкновении
+                    for b in balls:# удаляем все мячи
                         canv.delete(b.id)
-                    lives = 0  # t.live = 0
-                    t.hit()
+                    lives = 0
+                    t.hit() #мяч попал, поэтому нужно сделать вот это
                     canv.bind('<Button-1>', '')
                     canv.bind('<ButtonRelease-1>', '')
                     canv.itemconfig(screen1, text='Вы уничтожили цель за ' + str(bullet) + ' выстрелов')
