@@ -172,7 +172,9 @@ g1 = gun()
 bullet = 0
 balls = []
 lives = 1  # важная вещь для проверки на стлокновение
-
+#текст
+font = pygame.font.Font(None, 27)
+text = font.render("Вы уничтожили цель за: " + str(bullet) + " выстрелов", True, BLACK)  # обновление счета после попадания
 
 
 pygame.display.update()
@@ -181,7 +183,7 @@ clock = pygame.time.Clock()
 def new_game(event=''):  # основной цикл
     global targets, lives, balls, bullet, FPS, clock  # t1
 
-    for t in targets:  # создаем новые цел в игре
+    for t in targets:  # создаем новые цели в игре
         t.new_target()
         t.live = 1
     lives = 1
@@ -207,18 +209,17 @@ def new_game(event=''):  # основной цикл
             b.set_coords()
             for t in targets:
                 if b.hittest(t) and t.live:  # данное условие выполняется при столкновении
-                    for b in balls:  # удаляем все мячи
-                        pass
+                    screen.fill(WHITE)
+                    pygame.display.update()
+                    text = font.render("Вы уничтожили цель за: " + str(bullet) + " выстрелов", True, BLACK)
+                    screen.blit(text, [250, 300])
+                    balls = []
                     lives = 0
                     t.hit()  # мяч попал, поэтому нужно сделать вот это
                     pygame.display.update()
-                    time.sleep(5)
-                    new_game()
         pygame.display.update()
-        #time.sleep(1)
         g1.power_up()
-        screen.fill(WHITE)
-      # для исчезания прошлого рисунка
+        screen.fill(WHITE)# для исчезания прошлого рисунка
     time.sleep(5)
     new_game()
 new_game()
