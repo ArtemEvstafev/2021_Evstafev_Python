@@ -6,7 +6,7 @@ import pygame.draw as draw
 import numpy
 
 # КОНСТАНТЫ
-TARGETS_NUMBER = 2
+TARGETS_NUMBER = 3
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
@@ -44,6 +44,10 @@ class ball():
         draw.circle(screen, self.color, (self.x, self.y), self.r)
 
     def set_coords(self):
+        '''
+        метод меняет положения мяча
+        :return:
+        '''
         draw.circle(screen, self.color, (self.x, self.y), self.r)
 
     def move(self):
@@ -51,7 +55,7 @@ class ball():
 
         Метод описывает перемещение мяча за один кадр перерисовки. То есть, обновляет значения
         self.x и self.y с учетом скоростей self.vx и self.vy, силы гравитации, действующей на мяч,
-        и стен по краям окна (размер окна 800х600).
+        и стен по краям окна (размер окна 1500х780).
         """
 
         if ((self.x + self.r >= 1500 and self.vx > 0) or (self.x - self.r <= 0 and self.vx < 0)):
@@ -79,8 +83,18 @@ class ball():
         else:
             return False
 
+
 class small_ball(ball):
-    def __init__(self, x=0 , y=0):
+    '''
+    класс для нового типа снарядов, чтобы зарядить их зажмите 'z'
+    '''
+
+    def __init__(self, x=0, y=0):
+        '''
+        коструктор класса, x и y начальные координаты
+        :param x:
+        :param y:
+        '''
         self.x = x
         self.y = y
         self.a = 1
@@ -89,12 +103,12 @@ class small_ball(ball):
         self.vy = 0
         self.color = (0, 255, 255)
         draw.circle(screen, self.color, (self.x, self.y), self.r)
+
     def move(self):
         """Переместить мяч по прошествии единицы времени.
 
-        Метод описывает перемещение мяча за один кадр перерисовки. То есть, обновляет значения
-        self.x и self.y с учетом скоростей self.vx и self.vy, силы гравитации, действующей на мяч,
-        и стен по краям окна (размер окна 800х600).
+        Метод описывает перемещение снаряда за один кадр перерисовки. То есть, обновляет значения
+        self.x и self.y с учетом скоростей self.vx и self.vy
         """
 
         self.x += self.vx
@@ -102,7 +116,14 @@ class small_ball(ball):
 
 
 class gun():
+    '''
+    класс Танка
+    '''
+
     def __init__(self):
+        '''
+        коструктор для класса танка
+        '''
         self.f2_power = 10
         self.f2_on = 0
         self.an = 1
@@ -113,6 +134,10 @@ class gun():
         self.speed = 3
 
     def fire2_start(self, event):
+        '''
+        начало стрельбы
+        :return:
+        '''
         self.f2_on = 1
 
     def fire2_end(self, event):
@@ -124,10 +149,10 @@ class gun():
         global balls, bullet
         x, y = event.pos
         bullet += 1
-        if(pygame.key.get_pressed()[pygame.K_z]):
-            new_ball = small_ball(self.x, self.y)
+        if (pygame.key.get_pressed()[pygame.K_z]):
+            new_ball = small_ball(self.x_gun, self.y_gun)
         else:
-            new_ball = ball(self.x, self.y)
+            new_ball = ball(self.x_gun, self.y_gun)
         if (x - new_ball.x == 0):
             self.an = math.pi
         else:
@@ -151,11 +176,19 @@ class gun():
         pygame.draw.line(screen, BLACK, (self.x, self.y), (self.x_gun, self.y_gun), 7)
 
     def power_up(self):
+        '''
+        усиление пушки спустя время
+        :return:
+        '''
         if self.f2_on:
             if self.f2_power < 100:
                 self.f2_power += 1
 
     def gun_move(self):
+        '''
+        передвижение танка
+        :return:
+        '''
         if (pygame.key.get_pressed()[pygame.K_w]):
             g1.y += -self.speed
         else:
@@ -171,7 +204,14 @@ class gun():
 
 
 class target():
+    '''
+    класс мишени - красного круго
+    '''
+
     def __init__(self):
+        '''
+        коструктор вызывает метод, чтобы можно было в дальнейшем вызывать метод на уже существующий объект
+        '''
         self.new_target()
 
     def new_target(self):
@@ -200,6 +240,9 @@ class target():
 
 
 class square_t(target):
+    '''
+    класс мишени - черный квадрат
+    '''
 
     def new_target(self):
         x = self.x = rnd(50, 1450)
@@ -209,9 +252,17 @@ class square_t(target):
         draw.rect(screen, BLACK, (self.x - self.r, self.y - self.r, 2 * self.r, 2 * self.r))
 
     def set_coords(self):
+        '''
+        отрисовка квадратика
+        :return:
+        '''
         draw.rect(screen, BLACK, (self.x - self.r, self.y - self.r, 2 * self.r, 2 * self.r))
 
     def move(self):
+        '''
+        метод отвечает за движение квадрата спустя время
+        :return:
+        '''
         if ((self.x - self.r) >= 1500):
             self.x = 0 + self.r
         if (self.x + self.r < 0):
@@ -220,22 +271,41 @@ class square_t(target):
 
 
 def hit_happens():
-    global bullet, lives, points, balls
-    screen.fill(WHITE)
-    text = font.render("Вы уничтожили цель за: " + str(bullet) + " выстрелов", True, BLACK)
-    screen.blit(text, [250 + 180, 300])
-    pygame.display.update()
-    balls = []
-    lives = 0
-    points += 1
+    '''
+    функция вызывается при столкновении снаряда и мишени
+    :return:
+    '''
+    global bullet, lives, points, balls, targets, squares
+    if targets:
+        pass
+    else:
+        if squares:
+            pass
+        else:
+            screen.fill(WHITE)
+            text = font.render("Вы уничтожили цели за: " + str(bullet) + " выстрелов", True, BLACK)
+            screen.blit(text, [250 + 180, 300])
+            pygame.display.update()
+            balls = []
+            lives = 0
+            points += 1
+
+
+def new_targets_for_new_game():
+    '''
+    функция вызывается когда нужны новые цели для новой игры
+    :return:
+    '''
+    global targets, squares, TARGETS_NUMBER
+    for t in range(0, TARGETS_NUMBER):
+        targets.append(target())
+    for s in range(0, TARGETS_NUMBER):
+        squares.append(square_t())
 
 
 targets = []  # массив мишеней
 squares = []
-for t in range(0, TARGETS_NUMBER):
-    targets.append(target())
-for s in range(0, TARGETS_NUMBER):
-    squares.append(square_t())
+
 g1 = gun()
 bullet = 0
 balls = []
@@ -245,13 +315,19 @@ pygame.display.update()
 clock = pygame.time.Clock()
 
 
-def new_game(event=''):  # основной цикл
+def new_game():
+    '''
+    основной цикл программы
+    :param event:
+    :return:
+    '''
     global targets, lives, balls, bullet, FPS, clock, points, zleep, g1  # t1
 
     for t in targets:  # создаем новые цели в игре
         t.new_target()
     for s in squares:  # создаем новые цели в игре
         s.new_target()
+    new_targets_for_new_game()
     lives = 1
     g1 = gun()
     bullet = 0
@@ -279,9 +355,13 @@ def new_game(event=''):  # основной цикл
             b.set_coords()
             for t in targets:
                 if b.hittest(t):  # данное условие выполняется при столкновении
+                    balls.remove(b)
+                    targets.remove(t)
                     hit_happens()
             for s in squares:
                 if b.hittest(s):  # данное условие выполняется при столкновении
+                    balls.remove(b)
+                    squares.remove(s)
                     hit_happens()
         text_score = font.render(str(points), True, BLACK)
         screen.blit(text_score, [30, 30])

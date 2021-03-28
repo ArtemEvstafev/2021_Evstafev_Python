@@ -1,8 +1,10 @@
-A = [1, 2, 3] # список
-B = (1, 2, 3) # картэж
+A = [2] # список
+B = [1]
 
-print(A*3, B*3)
-
-print(A[1], B[1])
-
-print(A[1], B[1])
+if A:
+    pass
+else:
+    if B:
+        pass
+    else:
+        print('nothing')
