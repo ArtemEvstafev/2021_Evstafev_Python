@@ -154,7 +154,7 @@ class gun():
         else:
             new_ball = ball(self.x_gun, self.y_gun)
         if (x - new_ball.x == 0):
-            self.an = math.pi
+            self.an = math.pi/2
         else:
             self.an = math.atan(abs(y - new_ball.y) / abs(x - new_ball.x))
         new_ball.vx = numpy.sign(x - self.x) * self.f2_power * math.cos(self.an)
@@ -168,7 +168,7 @@ class gun():
 
         x, y = pygame.mouse.get_pos()
         if (x - self.x == 0):
-            self.an = math.pi
+            self.an = math.pi/2
         else:
             self.an = math.atan(abs(y - self.y) / abs(x - self.x))
         self.x_gun = self.x + numpy.sign(x - self.x) * max(self.f2_power, 20) * math.cos(self.an)
